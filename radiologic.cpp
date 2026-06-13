@@ -39,7 +39,7 @@ void RadioActions::load_settings() {
   String ssid = preferences.getString("ssid", default_ssid);
   String pass = preferences.getString("pass", default_password);
   
-  // Fix: Preferences API uses putChar/getChar for single byte boolean mappings
+
   bool staticIP = preferences.getChar("static", 0) == 1;
   
   if (staticIP) {
@@ -60,7 +60,7 @@ void RadioActions::load_settings() {
   }
   Serial.println("\nWiFi Connected. IP: " + WiFi.localIP().toString());
 
-  // Load IR Buttons
+
   preferences.begin("buttons", true);
   remoteMap[0].code = preferences.getUInt("btn0", Buttons::ON_OFF);
   remoteMap[1].code = preferences.getUInt("btn1", Buttons::RARRW_3);
@@ -70,7 +70,6 @@ void RadioActions::load_settings() {
   remoteMap[5].code = preferences.getUInt("btn5", Buttons::YELLOW_CIRCARRW);
   preferences.end();
 
-  // Load Stations
   preferences.begin("stations", true);
   stationsCount = preferences.getInt("count", 0);
   
@@ -134,7 +133,6 @@ void RadioActions::handle_web_config() {
   html += "</form></div>";
   preferences.end();
 
-  // Card 2: Stations Management
   html += "<div class='card'><h2>Radio Stations Management</h2><form action='/save_stations' method='POST'>";
   html += "<table border='1' cellpadding='5' style='width:100%; border-collapse:collapse;'><tr><th>Name</th><th>Stream URL</th><th>Delete?</th></tr>";
   for (int i = 0; i < stationsCount; i++) {
@@ -152,7 +150,6 @@ void RadioActions::handle_web_config() {
   html += "<input type='submit' value='Apply Station Updates'>";
   html += "</form></div>";
 
-  // Card 3: Remote Control
   html += "<div class='card'><h2>Remote Control Setup</h2>";
   html += "<p>Last Captured RAW IR Hex: <code style='font-size:18px; color:blue;'>0x" + String(state.lastReceivedCode, HEX) + "</code></p>";
   html += "<form action='/save_buttons' method='POST'><table border='1' cellpadding='5'>";
@@ -171,7 +168,6 @@ void RadioActions::handle_save_network() {
   preferences.putString("ssid", server.arg("ssid"));
   preferences.putString("pass", server.arg("pass"));
   
-  // Fix: changed setChar to putChar
   preferences.putChar("static", server.hasArg("static") ? 1 : 0); 
   
   preferences.putString("local_ip", server.arg("ip"));
@@ -279,7 +275,6 @@ void RadioActions::previous_station() {
 void RadioActions::vol_up() { if (state.volumeLevel < 21) state.volumeLevel++; audio.setVolume(state.volumeLevel); }
 void RadioActions::vol_down() { if (state.volumeLevel > 0) state.volumeLevel--; audio.setVolume(state.volumeLevel); }
 
-// Fix: Singular implementation of reset to avoid duplicate definition error
 void RadioActions::reset() {
   preferences.begin("buttons", false); preferences.clear(); preferences.end();
   preferences.begin("stations", false); preferences.clear(); preferences.end();
