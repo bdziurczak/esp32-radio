@@ -54,12 +54,6 @@ void loop()
           }
       }  
     }
-    else if (val != 0) 
-    {
-      // Optional: uncomment to see what noise looks like, then comment out
-      // Serial.print("Filtered Noise: 0x"); Serial.println(val, HEX);
-    }
-
     irrecv.resume();
   } 
 }
