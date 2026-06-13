@@ -39,8 +39,6 @@ void loop()
   {
     uint32_t val = IR_results.value;
     
-    // ENHANCED FILTER: Ignore 0, 0xFFFFFFFF, and values below 0x100000 
-    // Most standard 32-bit NEC protocol codes (like your 0xF7C03F) are large numbers.
     if (val > 0x100000 && val != 0xFFFFFFFF) 
     {
       state.lastReceivedCode = val;
